@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PvB Voortgang – José Rogaar</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d2e;
+      --surface2: #222540;
+      --border: #2e3150;
+      --k1: #6c63ff;
+      --k1-soft: #2a2660;
+      --k2: #00c9a7;
+      --k2-soft: #0a3330;
+      --accent: #f5a623;
+      --done: #4caf50;
+      --text: #e8eaf6;
+      --muted: #8b92b8;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      padding: 24px 16px 60px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      max-width: 960px;
+      margin: 0 auto 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    .avatar {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--k1), var(--k2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; font-weight: 700; flex-shrink: 0;
+    }
+
+    .header-info h1 { font-size: 22px; font-weight: 700; }
+    .header-info p  { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+    .header-badges {
+      margin-left: auto;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+    }
+
+    .badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .badge span { color: var(--text); font-weight: 600; }
+
+    /* ── TOTAAL VOORTGANG ── */
+    .total-progress {
+      max-width: 960px;
+      margin: 0 auto 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 28px;
+    }
+
+    .total-progress h2 {
+      font-size: 15px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 14px;
+    }
+
+    .big-bar-wrap { position: relative; }
+
+    .big-bar {
+      height: 20px;
+      background: var(--surface2);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .big-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--k1), var(--k2));
+      border-radius: 10px;
+      transition: width .5s ease;
+    }
+
+    .big-pct {
+      margin-top: 8px;
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--k1), var(--k2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ── PROJECT INFO ── */
+    .project-card {
+      max-width: 960px;
+      margin: 0 auto 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 28px;
+    }
+
+    .project-card h2 {
+      font-size: 15px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 14px;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .pinfo {
+      background: var(--surface2);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .pinfo-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+    .pinfo-val   { font-size: 14px; font-weight: 600; margin-top: 4px; }
+
+    /* ── SPRINTS ── */
+    .section-wrap {
+      max-width: 960px;
+      margin: 0 auto 28px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 14px;
+    }
+
+    .sprints-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .sprint-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      user-select: none;
+    }
+
+    .sprint-card:hover { border-color: var(--k1); }
+
+    .sprint-card.done {
+      border-color: var(--done);
+      background: #0d2e0f;
+    }
+
+    .sprint-card.active {
+      border-color: var(--accent);
+      background: #2e200a;
+    }
+
+    .sprint-num { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+    .sprint-name { font-size: 13px; font-weight: 600; margin-top: 4px; }
+    .sprint-status { margin-top: 8px; font-size: 12px; }
+    .sprint-status.s-done   { color: var(--done); }
+    .sprint-status.s-active { color: var(--accent); }
+    .sprint-status.s-todo   { color: var(--muted); }
+
+    /* ── KERNTAKEN ── */
+    .kt-block {
+      max-width: 960px;
+      margin: 0 auto 28px;
+    }
+
+    .kt-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .kt-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .kt-dot.k1 { background: var(--k1); }
+    .kt-dot.k2 { background: var(--k2); }
+
+    .kt-header h2 { font-size: 17px; font-weight: 700; }
+    .kt-header .kt-code { font-size: 12px; color: var(--muted); margin-left: 4px; }
+
+    .kt-progress-bar {
+      height: 6px;
+      background: var(--surface2);
+      border-radius: 3px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .kt-progress-fill { height: 100%; border-radius: 3px; transition: width .4s ease; }
+    .kt-progress-fill.k1 { background: var(--k1); }
+    .kt-progress-fill.k2 { background: var(--k2); }
+
+    /* ── WERKPROCES CARD ── */
+    .wp-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    .wp-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .wp-header:hover { background: var(--surface2); }
+
+    .wp-code {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 5px;
+      flex-shrink: 0;
+    }
+
+    .wp-code.k1 { background: var(--k1-soft); color: var(--k1); }
+    .wp-code.k2 { background: var(--k2-soft); color: var(--k2); }
+
+    .wp-title { font-size: 15px; font-weight: 600; flex: 1; }
+
+    .wp-pct {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-left: auto;
+    }
+
+    .wp-chevron {
+      color: var(--muted);
+      transition: transform .25s;
+      font-size: 12px;
+    }
+
+    .wp-card.open .wp-chevron { transform: rotate(180deg); }
+
+    .wp-body { display: none; padding: 0 20px 18px; }
+    .wp-card.open .wp-body { display: block; }
+
+    .wp-bar {
+      height: 4px;
+      background: var(--surface2);
+      border-radius: 2px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .wp-bar-fill { height: 100%; border-radius: 2px; transition: width .4s ease; }
+    .wp-bar-fill.k1 { background: var(--k1); }
+    .wp-bar-fill.k2 { background: var(--k2); }
+
+    /* ── TASKS ── */
+    .task-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--surface2);
+      border-radius: 8px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: border-color .15s;
+    }
+
+    .task-item:hover { border-color: var(--border); }
+
+    .task-item.checked { opacity: .55; }
+
+    .task-check {
+      width: 18px; height: 18px;
+      border-radius: 4px;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
+      transition: background .15s, border-color .15s;
+    }
+
+    .task-item.checked .task-check {
+      background: var(--done);
+      border-color: var(--done);
+    }
+
+    .task-check::after {
+      content: '';
+      display: none;
+      width: 5px; height: 9px;
+      border: 2px solid #fff;
+      border-top: none; border-left: none;
+      transform: rotate(45deg) translateY(-1px);
+    }
+
+    .task-item.checked .task-check::after { display: block; }
+
+    .task-text { font-size: 14px; line-height: 1.45; }
+
+    .task-tag {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-left: auto;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .task-tag.crucial { background: #3a1a00; color: var(--accent); border: 1px solid #5a2e00; }
+    .task-tag.verslag { background: #1a1a3a; color: #9090ff; border: 1px solid #2a2a5a; }
+
+    /* ── VERSLAGEN ── */
+    .verslagen-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+    }
+
+    .verslag-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      cursor: pointer;
+      transition: border-color .2s;
+      user-select: none;
+    }
+
+    .verslag-card:hover { border-color: #4a4d70; }
+
+    .verslag-card.done { border-color: var(--done); background: #0d2e0f; }
+
+    .verslag-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .verslag-icon { font-size: 22px; }
+
+    .verslag-num {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .verslag-name { font-size: 14px; font-weight: 600; }
+    .verslag-sub  { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    .verslag-status {
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .verslag-card.done .verslag-status { color: var(--done); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      header { padding: 20px; gap: 16px; }
+      .header-badges { margin-left: 0; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="avatar">JR</div>
+  <div class="header-info">
+    <h1>PvB Voortgang</h1>
+    <p>Proeve van Bekwaamheid · Software Developer 25604</p>
+  </div>
+  <div class="header-badges">
+    <div class="badge">Student <span>José Rogaar · 236081</span></div>
+    <div class="badge">Bedrijf <span>Puur ICT, Heerenveen</span></div>
+    <div class="badge">Einddatum <span>22-10-2024</span></div>
+    <div class="badge">Beoordelaar <span>Arthur de Groot</span></div>
+  </div>
+</header>
+
+<!-- TOTAAL VOORTGANG -->
+<div class="total-progress">
+  <h2>Totale voortgang</h2>
+  <div class="big-bar">
+    <div class="big-bar-fill" id="totalBar" style="width:0%"></div>
+  </div>
+  <div class="big-pct" id="totalPct">0%</div>
+</div>
+
+<!-- PROJECT INFO -->
+<div class="project-card">
+  <h2>Project</h2>
+  <div class="project-grid">
+    <div class="pinfo"><div class="pinfo-label">Opdrachtgever</div><div class="pinfo-val">NKB Solutions</div></div>
+    <div class="pinfo"><div class="pinfo-label">Applicatie</div><div class="pinfo-val">Urenregistratie-app</div></div>
+    <div class="pinfo"><div class="pinfo-label">Platform</div><div class="pinfo-val">Power Apps (Canvas)</div></div>
+    <div class="pinfo"><div class="pinfo-label">Koppeling</div><div class="pinfo-val">Microsoft Dynamics 365</div></div>
+    <div class="pinfo"><div class="pinfo-label">Dataopslag</div><div class="pinfo-val">Dataverse</div></div>
+    <div class="pinfo"><div class="pinfo-label">Automatisering</div><div class="pinfo-val">Power Automate</div></div>
+  </div>
+</div>
+
+<!-- SPRINTS -->
+<div class="section-wrap">
+  <div class="section-title">Sprints (5 totaal)</div>
+  <div class="sprints-grid" id="sprintsGrid"></div>
+</div>
+
+<!-- KERNTAAK 1 -->
+<div class="kt-block">
+  <div class="kt-header">
+    <div class="kt-dot k1"></div>
+    <h2>B1-K1: Realiseert software</h2>
+  </div>
+  <div class="kt-progress-bar"><div class="kt-progress-fill k1" id="k1bar" style="width:0%"></div></div>
+  <div id="k1cards"></div>
+</div>
+
+<!-- KERNTAAK 2 -->
+<div class="kt-block">
+  <div class="kt-header">
+    <div class="kt-dot k2"></div>
+    <h2>B1-K2: Werkt in een ontwikkelteam</h2>
+  </div>
+  <div class="kt-progress-bar"><div class="kt-progress-fill k2" id="k2bar" style="width:0%"></div></div>
+  <div id="k2cards"></div>
+</div>
+
+<!-- VERSLAGEN -->
+<div class="section-wrap">
+  <div class="section-title">Op te leveren verslagen</div>
+  <div class="verslagen-grid" id="verslagenGrid"></div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────
+const SPRINTS = [
+  { name: "Kick-off & Planning", status: "done" },
+  { name: "Ontwerp & Analyse",   status: "done" },
+  { name: "Realisatie I",        status: "active" },
+  { name: "Realisatie II",       status: "todo" },
+  { name: "Testen & Review",     status: "todo" },
+];
+
+const K1_WPS = [
+  {
+    code: "B1-K1-W1",
+    title: "Plant werkzaamheden en bewaakt de voortgang",
+    tasks: [
+      { text: "Wensen en eisen opgesteld en gedocumenteerd", crucial: true },
+      { text: "User stories opgesteld en afgestemd", crucial: false },
+      { text: "Definition of Done bepaald", crucial: false },
+      { text: "Project backlog aangemaakt en geprioriteerd", crucial: false },
+      { text: "Realistische planning gemaakt en afgestemd", crucial: false },
+      { text: "Voortgang bewaakt en vastgelegd", crucial: false },
+      { text: "Afwijkingen van planning vastgelegd", crucial: false },
+    ],
+  },
+  {
+    code: "B1-K1-W2",
+    title: "Ontwerpt software",
+    tasks: [
+      { text: "ERD uitgewerkt (gegevensontwerp)", crucial: true },
+      { text: "Klassendiagram gemaakt", crucial: false },
+      { text: "Use case diagram gemaakt", crucial: false },
+      { text: "Wireframes / mock-ups ontworpen", crucial: false },
+      { text: "Activiteitendiagram of flowchart gemaakt", crucial: false },
+      { text: "Gebruikersrollen en toegangsrechten vastgelegd", crucial: false },
+      { text: "Keuzes onderbouwd op haalbaarheid, privacy & security", crucial: true },
+      { text: "Ontwerp gepresenteerd aan betrokkenen", crucial: false },
+    ],
+  },
+  {
+    code: "B1-K1-W3",
+    title: "Realiseert (onderdelen van) software",
+    tasks: [
+      { text: "Canvas App gebouwd in Power Apps", crucial: true },
+      { text: "Ureninvoer-scherm gerealiseerd", crucial: true },
+      { text: "Weekoverzicht-scherm gerealiseerd", crucial: false },
+      { text: "Declaraties-scherm gerealiseerd", crucial: false },
+      { text: "Dataverse tabellen ingericht (uren, medewerkers, projecten)", crucial: false },
+      { text: "Koppeling Dynamics 365 gerealiseerd", crucial: false },
+      { text: "Huisstijl NKB Solutions toegepast", crucial: false },
+      { text: "OOP-principes / Power FX logica toegepast", crucial: false },
+      { text: "Code voldoet aan codeconventies (CamelCasing)", crucial: true },
+      { text: "Versiebeheer actief bijgehouden (commits, branches)", crucial: true },
+      { text: "Codereview uitgevoerd", crucial: false },
+    ],
+  },
+  {
+    code: "B1-K1-W4",
+    title: "Test software",
+    tasks: [
+      { text: "Testscenario's opgesteld per user story", crucial: true },
+      { text: "Testcases aangemaakt in Power Apps Test Studio", crucial: true },
+      { text: "Dataverse-koppelingen handmatig integratiegetest", crucial: false },
+      { text: "Power Automate flows getest (e-mailrapportage)", crucial: false },
+      { text: "Testresultaten vastgelegd in testrapport", crucial: false },
+      { text: "Conclusies en verbetervoorstellen opgesteld", crucial: false },
+      { text: "Gebruikersfeedback verzameld en verwerkt", crucial: false },
+    ],
+  },
+  {
+    code: "B1-K1-W5",
+    title: "Doet verbetervoorstellen voor de software",
+    tasks: [
+      { text: "Verbetervoorstellen opgesteld na review/demo", crucial: true },
+      { text: "Verbetervoorstellen van integratietest gebundeld", crucial: false },
+      { text: "Planning voor verbeteringen vastgesteld", crucial: false },
+      { text: "Verbetervoorstellen afgestemd met betrokkenen", crucial: false },
+    ],
+  },
+];
+
+const K2_WPS = [
+  {
+    code: "B1-K2-W1",
+    title: "Voert overleg",
+    tasks: [
+      { text: "Overleg gevoerd over user stories + DoD (punt 8)", crucial: false },
+      { text: "Afspraken uit overleg vastgelegd", crucial: false },
+      { text: "Feedback gevraagd over deelname aan overleg", crucial: false },
+      { text: "Activiteiten op basis van afspraken bijgehouden", crucial: false },
+      { text: "Regelmatig afgestemd met team en opdrachtgever", crucial: false },
+    ],
+  },
+  {
+    code: "B1-K2-W2",
+    title: "Presenteert het opgeleverde werk",
+    tasks: [
+      { text: "Ontwerp gepresenteerd aan betrokkenen", crucial: false },
+      { text: "Functionaliteiten gedemonstreerd (sprint review)", crucial: false },
+      { text: "Vragen beantwoord met steekhoudende argumenten", crucial: false },
+      { text: "Betrokkenen goed geïnformeerd (gecontroleerd)", crucial: false },
+    ],
+  },
+  {
+    code: "B1-K2-W3",
+    title: "Reflecteert op het werk",
+    tasks: [
+      { text: "Retrospective gehouden na sprint", crucial: false },
+      { text: "Verbetervoorstellen voor eigen functioneren opgesteld", crucial: false },
+      { text: "Verbetervoorstellen voor teamproces opgesteld", crucial: false },
+      { text: "Verbetervoorstellen verwerkt in backlog", crucial: false },
+      { text: "Feedback gegeven aan collega's", crucial: false },
+    ],
+  },
+];
+
+const VERSLAGEN = [
+  { icon: "📋", name: "Plant werkzaamheden en bewaakt de voortgang", sub: "Opdracht 1 – eenmalig" },
+  { icon: "📈", name: "Evaluatie voortgang", sub: "Doorlopend verslag – alle sprints" },
+  { icon: "🗣️", name: "Voert overleg", sub: "Opdracht 1 – overlegverslag" },
+  { icon: "🖊️", name: "Ontwerp software", sub: "Opdracht 2" },
+  { icon: "🎤", name: "Presenteert het opgeleverde werk", sub: "Opdracht 2" },
+  { icon: "💻", name: "Realiseert (onderdelen van) software", sub: "Opdracht 3" },
+  { icon: "🧪", name: "Test software", sub: "Opdracht 4" },
+  { icon: "🔧", name: "Doet verbetervoorstellen voor de software", sub: "Opdracht 5" },
+  { icon: "🪞", name: "Reflecteert op het werk", sub: "Opdracht 5" },
+  { icon: "✅", name: "Evaluatieverslag voortgang (afsluiting)", sub: "Opdracht 6 – eindgesprek" },
+];
+
+// ── STATE ──────────────────────────────────────────────────────────────
+const STORE_KEY = "pvb_state_jose";
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+  catch { return {}; }
+}
+
+function saveState(state) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(state));
+}
+
+let state = loadState();
+
+// tasks: state.tasks[`${code}-${i}`] = true/false
+// verslagen: state.verslagen[i] = true/false
+// sprints: state.sprints[i] = "done"|"active"|"todo"
+
+// ── RENDER SPRINTS ──────────────────────────────────────────────────
+function renderSprints() {
+  const grid = document.getElementById("sprintsGrid");
+  grid.innerHTML = "";
+
+  SPRINTS.forEach((sp, i) => {
+    const status = state.sprints?.[i] ?? sp.status;
+    const statusMap = { done: "Afgerond ✓", active: "Bezig ▶", todo: "Gepland" };
+    const cls = { done: "s-done", active: "s-active", todo: "s-todo" }[status];
+    const card = document.createElement("div");
+    card.className = `sprint-card ${status === "done" ? "done" : status === "active" ? "active" : ""}`;
+    card.innerHTML = `
+      <div class="sprint-num">Sprint ${i + 1}</div>
+      <div class="sprint-name">${sp.name}</div>
+      <div class="sprint-status ${cls}">${statusMap[status]}</div>
+    `;
+    card.addEventListener("click", () => {
+      const statuses = ["todo", "active", "done"];
+      const cur = state.sprints?.[i] ?? sp.status;
+      const next = statuses[(statuses.indexOf(cur) + 1) % 3];
+      if (!state.sprints) state.sprints = {};
+      state.sprints[i] = next;
+      saveState(state);
+      renderSprints();
+    });
+    grid.appendChild(card);
+  });
+}
+
+// ── RENDER WP CARDS ────────────────────────────────────────────────
+function renderWP(wps, containerId, colorClass) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+
+  wps.forEach((wp) => {
+    const tasksDone = wp.tasks.filter((_, i) => state.tasks?.[`${wp.code}-${i}`]).length;
+    const pct = Math.round((tasksDone / wp.tasks.length) * 100);
+
+    const card = document.createElement("div");
+    card.className = "wp-card";
+    card.innerHTML = `
+      <div class="wp-header">
+        <div class="wp-code ${colorClass}">${wp.code}</div>
+        <div class="wp-title">${wp.title}</div>
+        <div class="wp-pct">${pct}%</div>
+        <div class="wp-chevron">▼</div>
+      </div>
+      <div class="wp-body">
+        <div class="wp-bar"><div class="wp-bar-fill ${colorClass}" style="width:${pct}%"></div></div>
+        <ul class="task-list"></ul>
+      </div>
+    `;
+
+    const list = card.querySelector(".task-list");
+    wp.tasks.forEach((task, i) => {
+      const key = `${wp.code}-${i}`;
+      const checked = !!state.tasks?.[key];
+      const li = document.createElement("li");
+      li.className = `task-item${checked ? " checked" : ""}`;
+      li.innerHTML = `
+        <div class="task-check"></div>
+        <div class="task-text">${task.text}</div>
+        ${task.crucial ? '<div class="task-tag crucial">Cruciaal</div>' : ""}
+      `;
+      li.addEventListener("click", () => {
+        if (!state.tasks) state.tasks = {};
+        state.tasks[key] = !state.tasks[key];
+        saveState(state);
+        renderAll();
+      });
+      list.appendChild(li);
+    });
+
+    card.querySelector(".wp-header").addEventListener("click", (e) => {
+      if (e.target.closest(".task-item")) return;
+      card.classList.toggle("open");
+    });
+
+    container.appendChild(card);
+  });
+}
+
+// ── RENDER VERSLAGEN ───────────────────────────────────────────────
+function renderVerslagen() {
+  const grid = document.getElementById("verslagenGrid");
+  grid.innerHTML = "";
+  VERSLAGEN.forEach((v, i) => {
+    const done = !!state.verslagen?.[i];
+    const card = document.createElement("div");
+    card.className = `verslag-card${done ? " done" : ""}`;
+    card.innerHTML = `
+      <div class="verslag-top">
+        <div class="verslag-icon">${v.icon}</div>
+        <div><div class="verslag-num">Verslag ${i + 1}</div></div>
+      </div>
+      <div class="verslag-name">${v.name}</div>
+      <div class="verslag-sub">${v.sub}</div>
+      <div class="verslag-status">${done ? "✓ Ingeleverd" : "Nog in te leveren"}</div>
+    `;
+    card.addEventListener("click", () => {
+      if (!state.verslagen) state.verslagen = {};
+      state.verslagen[i] = !state.verslagen[i];
+      saveState(state);
+      renderVerslagen();
+      updateProgress();
+    });
+    grid.appendChild(card);
+  });
+}
+
+// ── UPDATE PROGRESS ────────────────────────────────────────────────
+function updateProgress() {
+  // K1
+  const k1Tasks = K1_WPS.flatMap((wp, wi) =>
+    wp.tasks.map((_, ti) => !!state.tasks?.[`${wp.code}-${ti}`])
+  );
+  const k1Pct = Math.round((k1Tasks.filter(Boolean).length / k1Tasks.length) * 100);
+  document.getElementById("k1bar").style.width = k1Pct + "%";
+
+  // K2
+  const k2Tasks = K2_WPS.flatMap((wp) =>
+    wp.tasks.map((_, ti) => !!state.tasks?.[`${wp.code}-${ti}`])
+  );
+  const k2Pct = Math.round((k2Tasks.filter(Boolean).length / k2Tasks.length) * 100);
+  document.getElementById("k2bar").style.width = k2Pct + "%";
+
+  // verslagen
+  const vDone = VERSLAGEN.filter((_, i) => state.verslagen?.[i]).length;
+  const vPct = Math.round((vDone / VERSLAGEN.length) * 100);
+
+  // totaal (gewogen: 50% tasks, 30% K2, 20% verslagen)
+  const allTasks = [...k1Tasks, ...k2Tasks];
+  const allPct = Math.round((allTasks.filter(Boolean).length / allTasks.length) * 100);
+  const total = Math.round(allPct * 0.7 + vPct * 0.3);
+
+  document.getElementById("totalBar").style.width = total + "%";
+  document.getElementById("totalPct").textContent = total + "%";
+}
+
+// ── RENDER ALL ─────────────────────────────────────────────────────
+function renderAll() {
+  renderSprints();
+  renderWP(K1_WPS, "k1cards", "k1");
+  renderWP(K2_WPS, "k2cards", "k2");
+  renderVerslagen();
+  updateProgress();
+}
+
+renderAll();
+</script>
+</body>
+</html>
