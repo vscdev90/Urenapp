@@ -636,14 +636,14 @@ const VERSLAGEN = [
 
 // ── STATE ──────────────────────────────────────────────────────────────
 const STORE_KEY    = "pvb_state_jose";
-const STATE_VER    = 2; // bump to reset localStorage to new defaults
+const STATE_VER    = 3; // bump to reset localStorage to new defaults
 
-// Voortgang op basis van verslag B1-K1-W1 (Sprint 0 afgerond, Sprint 1 actief)
+// Voortgang op basis van verslagen B1-K1-W1, B1-K2-W1 en B1-K1-W2
 const DEFAULT_STATE = {
   _ver: STATE_VER,
   sprints: { 0: "done", 1: "active", 2: "todo", 3: "todo", 4: "todo" },
   tasks: {
-    // B1-K1-W1: Plant werkzaamheden – alle taken afgerond (verslag af)
+    // B1-K1-W1: Plant werkzaamheden – alle taken afgerond
     "B1-K1-W1-0": true,
     "B1-K1-W1-1": true,
     "B1-K1-W1-2": true,
@@ -651,13 +651,24 @@ const DEFAULT_STATE = {
     "B1-K1-W1-4": true,
     "B1-K1-W1-5": true,
     "B1-K1-W1-6": true,
-    // B1-K2-W1: Voert overleg – afgestemd met opdrachtgever (punt 8 + afspraken)
-    "B1-K2-W1-0": true,
-    "B1-K2-W1-1": true,
-    "B1-K2-W1-4": true,
+    // B1-K1-W2: Ontwerpt software – ERD, use case, wireframes, activiteitendiagram,
+    //           rollen en onderbouwing klaar; klassendiagram n.v.t.; presentatie nog open
+    "B1-K1-W2-0": true,  // ERD uitgewerkt
+    "B1-K1-W2-2": true,  // Use case diagram
+    "B1-K1-W2-3": true,  // Wireframes / mock-ups
+    "B1-K1-W2-4": true,  // Activiteitendiagram
+    "B1-K1-W2-5": true,  // Gebruikersrollen en toegangsrechten
+    "B1-K1-W2-6": true,  // Keuzes onderbouwd (cruciaal)
+    // B1-K2-W1: Voert overleg – volledig afgerond (alle 5 taken)
+    "B1-K2-W1-0": true,  // Overleg gevoerd (user stories + DoD punt 8)
+    "B1-K2-W1-1": true,  // Afspraken vastgelegd
+    "B1-K2-W1-2": true,  // Feedback gevraagd op deelname
+    "B1-K2-W1-3": true,  // Activiteiten op basis van afspraken bijgehouden
+    "B1-K2-W1-4": true,  // Regelmatig afgestemd met opdrachtgever
   },
   verslagen: {
     0: true,  // Plant werkzaamheden en bewaakt de voortgang – ingeleverd
+    2: true,  // Voert overleg – ingeleverd (13 feb 2026)
   },
 };
 
