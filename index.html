@@ -605,11 +605,38 @@ const VERSLAGEN = [
 ];
 
 // ── STATE ──────────────────────────────────────────────────────────────
-const STORE_KEY = "pvb_state_jose";
+const STORE_KEY    = "pvb_state_jose";
+const STATE_VER    = 2; // bump to reset localStorage to new defaults
+
+// Voortgang op basis van verslag B1-K1-W1 (Sprint 0 afgerond, Sprint 1 actief)
+const DEFAULT_STATE = {
+  _ver: STATE_VER,
+  sprints: { 0: "done", 1: "active", 2: "todo", 3: "todo", 4: "todo" },
+  tasks: {
+    // B1-K1-W1: Plant werkzaamheden – alle taken afgerond (verslag af)
+    "B1-K1-W1-0": true,
+    "B1-K1-W1-1": true,
+    "B1-K1-W1-2": true,
+    "B1-K1-W1-3": true,
+    "B1-K1-W1-4": true,
+    "B1-K1-W1-5": true,
+    "B1-K1-W1-6": true,
+    // B1-K2-W1: Voert overleg – afgestemd met opdrachtgever (punt 8 + afspraken)
+    "B1-K2-W1-0": true,
+    "B1-K2-W1-1": true,
+    "B1-K2-W1-4": true,
+  },
+  verslagen: {
+    0: true,  // Plant werkzaamheden en bewaakt de voortgang – ingeleverd
+  },
+};
 
 function loadState() {
-  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
-  catch { return {}; }
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORE_KEY));
+    if (saved && saved._ver === STATE_VER) return saved;
+    return { ...DEFAULT_STATE };
+  } catch { return { ...DEFAULT_STATE }; }
 }
 
 function saveState(state) {
