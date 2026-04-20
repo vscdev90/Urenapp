@@ -4,21 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PvB Voortgang – José Rogaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f1117;
-      --surface: #1a1d2e;
-      --surface2: #222540;
-      --border: #2e3150;
-      --k1: #6c63ff;
-      --k1-soft: #2a2660;
-      --k2: #00c9a7;
-      --k2-soft: #0a3330;
-      --accent: #f5a623;
-      --done: #4caf50;
-      --text: #e8eaf6;
-      --muted: #8b92b8;
-      --radius: 12px;
+      --bg:       #F2F2F7;
+      --surface:  #FFFFFF;
+      --surface2: #F7F7FA;
+      --border:   #E4E4EF;
+      --k1:       #5C5CE0;
+      --k1-soft:  #EDEDFB;
+      --k2:       #0ABF83;
+      --k2-soft:  #E6F9F3;
+      --accent:   #F59E0B;
+      --accent-soft: #FFF8E7;
+      --done:     #0ABF83;
+      --done-soft:#E6F9F3;
+      --text:     #1A1A2E;
+      --muted:    #6B7280;
+      --shadow:   0 1px 3px rgba(0,0,0,.07), 0 4px 14px rgba(0,0,0,.05);
+      --radius:   14px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,107 +31,112 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
       min-height: 100vh;
-      padding: 24px 16px 60px;
+      padding: 32px 16px 72px;
     }
 
     /* ── HEADER ── */
     header {
       max-width: 960px;
-      margin: 0 auto 32px;
-      background: var(--surface);
-      border: 1px solid var(--border);
+      margin: 0 auto 28px;
+      background: var(--k1);
       border-radius: var(--radius);
       padding: 28px 32px;
       display: flex;
       align-items: center;
-      gap: 28px;
+      gap: 24px;
       flex-wrap: wrap;
+      box-shadow: 0 4px 20px rgba(92,92,224,.25);
     }
 
     .avatar {
-      width: 64px; height: 64px;
+      width: 56px; height: 56px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--k1), var(--k2));
+      background: rgba(255,255,255,.2);
+      border: 2px solid rgba(255,255,255,.4);
       display: flex; align-items: center; justify-content: center;
-      font-size: 26px; font-weight: 700; flex-shrink: 0;
+      font-size: 22px; font-weight: 700; color: #fff; flex-shrink: 0;
     }
 
-    .header-info h1 { font-size: 22px; font-weight: 700; }
-    .header-info p  { color: var(--muted); font-size: 14px; margin-top: 4px; }
+    .header-info h1 { font-size: 20px; font-weight: 700; color: #fff; }
+    .header-info p  { color: rgba(255,255,255,.75); font-size: 13px; margin-top: 3px; }
 
     .header-badges {
       margin-left: auto;
-      display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 5px;
     }
 
     .badge {
-      background: var(--surface2);
-      border: 1px solid var(--border);
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
       border-radius: 6px;
       padding: 4px 10px;
       font-size: 12px;
-      color: var(--muted);
+      color: rgba(255,255,255,.8);
     }
 
-    .badge span { color: var(--text); font-weight: 600; }
+    .badge span { color: #fff; font-weight: 600; }
 
     /* ── TOTAAL VOORTGANG ── */
     .total-progress {
       max-width: 960px;
-      margin: 0 auto 28px;
+      margin: 0 auto 24px;
       background: var(--surface);
-      border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 22px 28px;
+      padding: 24px 28px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 28px;
     }
 
+    .total-progress-left { flex: 1; }
+
     .total-progress h2 {
-      font-size: 15px;
+      font-size: 12px;
+      font-weight: 600;
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: .08em;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
-    .big-bar-wrap { position: relative; }
-
     .big-bar {
-      height: 20px;
+      height: 12px;
       background: var(--surface2);
-      border-radius: 10px;
+      border-radius: 6px;
       overflow: hidden;
+      border: 1px solid var(--border);
     }
 
     .big-bar-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--k1), var(--k2));
-      border-radius: 10px;
+      border-radius: 6px;
       transition: width .5s ease;
     }
 
     .big-pct {
-      margin-top: 8px;
-      font-size: 28px;
+      font-size: 36px;
       font-weight: 800;
-      background: linear-gradient(90deg, var(--k1), var(--k2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--k1);
+      white-space: nowrap;
     }
 
     /* ── PROJECT INFO ── */
     .project-card {
       max-width: 960px;
-      margin: 0 auto 28px;
+      margin: 0 auto 24px;
       background: var(--surface);
-      border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 22px 28px;
+      box-shadow: var(--shadow);
     }
 
-    .project-card h2 {
-      font-size: 15px;
+    .card-label {
+      font-size: 12px;
+      font-weight: 600;
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: .08em;
@@ -135,64 +145,67 @@
 
     .project-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 10px;
     }
 
     .pinfo {
       background: var(--surface2);
-      border-radius: 8px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
       padding: 12px 14px;
     }
 
-    .pinfo-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
-    .pinfo-val   { font-size: 14px; font-weight: 600; margin-top: 4px; }
+    .pinfo-label { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+    .pinfo-val   { font-size: 14px; font-weight: 600; margin-top: 4px; color: var(--text); }
 
     /* ── SPRINTS ── */
     .section-wrap {
       max-width: 960px;
-      margin: 0 auto 28px;
+      margin: 0 auto 24px;
     }
 
     .section-title {
-      font-size: 15px;
+      font-size: 12px;
+      font-weight: 600;
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: .08em;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .sprints-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 12px;
+      gap: 10px;
     }
 
     .sprint-card {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
       padding: 16px;
       cursor: pointer;
-      transition: border-color .2s, background .2s;
+      transition: border-color .2s, box-shadow .2s;
       user-select: none;
+      box-shadow: var(--shadow);
     }
 
-    .sprint-card:hover { border-color: var(--k1); }
+    .sprint-card:hover { border-color: var(--k1); box-shadow: 0 4px 16px rgba(92,92,224,.12); }
 
     .sprint-card.done {
       border-color: var(--done);
-      background: #0d2e0f;
+      background: var(--done-soft);
     }
 
     .sprint-card.active {
       border-color: var(--accent);
-      background: #2e200a;
+      background: var(--accent-soft);
     }
 
-    .sprint-num { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
-    .sprint-name { font-size: 13px; font-weight: 600; margin-top: 4px; }
-    .sprint-status { margin-top: 8px; font-size: 12px; }
+    .sprint-num  { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+    .sprint-name { font-size: 13px; font-weight: 600; margin-top: 5px; color: var(--text); }
+    .sprint-status { margin-top: 10px; font-size: 12px; font-weight: 500; }
     .sprint-status.s-done   { color: var(--done); }
     .sprint-status.s-active { color: var(--accent); }
     .sprint-status.s-todo   { color: var(--muted); }
@@ -200,18 +213,18 @@
     /* ── KERNTAKEN ── */
     .kt-block {
       max-width: 960px;
-      margin: 0 auto 28px;
+      margin: 0 auto 24px;
     }
 
     .kt-header {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 14px;
+      gap: 10px;
+      margin-bottom: 12px;
     }
 
     .kt-dot {
-      width: 12px; height: 12px;
+      width: 10px; height: 10px;
       border-radius: 50%;
       flex-shrink: 0;
     }
@@ -219,14 +232,13 @@
     .kt-dot.k1 { background: var(--k1); }
     .kt-dot.k2 { background: var(--k2); }
 
-    .kt-header h2 { font-size: 17px; font-weight: 700; }
-    .kt-header .kt-code { font-size: 12px; color: var(--muted); margin-left: 4px; }
+    .kt-header h2 { font-size: 16px; font-weight: 700; }
 
     .kt-progress-bar {
-      height: 6px;
-      background: var(--surface2);
+      height: 5px;
+      background: var(--border);
       border-radius: 3px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       overflow: hidden;
     }
 
@@ -237,19 +249,25 @@
     /* ── WERKPROCES CARD ── */
     .wp-card {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      margin-bottom: 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 10px;
       overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: border-color .2s;
     }
+
+    .wp-card.open { border-color: var(--k1); }
+    .wp-card.open.k2-card { border-color: var(--k2); }
 
     .wp-header {
       display: flex;
       align-items: center;
-      gap: 14px;
-      padding: 16px 20px;
+      gap: 12px;
+      padding: 15px 20px;
       cursor: pointer;
       user-select: none;
+      transition: background .15s;
     }
 
     .wp-header:hover { background: var(--surface2); }
@@ -257,27 +275,28 @@
     .wp-code {
       font-size: 11px;
       font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 5px;
+      padding: 3px 9px;
+      border-radius: 6px;
       flex-shrink: 0;
+      letter-spacing: .02em;
     }
 
     .wp-code.k1 { background: var(--k1-soft); color: var(--k1); }
-    .wp-code.k2 { background: var(--k2-soft); color: var(--k2); }
+    .wp-code.k2 { background: var(--k2-soft); color: #077a53; }
 
-    .wp-title { font-size: 15px; font-weight: 600; flex: 1; }
+    .wp-title { font-size: 14px; font-weight: 600; flex: 1; color: var(--text); }
 
     .wp-pct {
       font-size: 13px;
       font-weight: 700;
       color: var(--muted);
-      margin-left: auto;
     }
 
     .wp-chevron {
       color: var(--muted);
       transition: transform .25s;
-      font-size: 12px;
+      font-size: 11px;
+      margin-left: 4px;
     }
 
     .wp-card.open .wp-chevron { transform: rotate(180deg); }
@@ -287,9 +306,9 @@
 
     .wp-bar {
       height: 4px;
-      background: var(--surface2);
+      background: var(--border);
       border-radius: 2px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       overflow: hidden;
     }
 
@@ -298,28 +317,29 @@
     .wp-bar-fill.k2 { background: var(--k2); }
 
     /* ── TASKS ── */
-    .task-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .task-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
 
     .task-item {
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      padding: 10px 14px;
+      padding: 10px 13px;
       background: var(--surface2);
-      border-radius: 8px;
-      border: 1px solid transparent;
+      border-radius: 9px;
+      border: 1.5px solid transparent;
       cursor: pointer;
-      transition: border-color .15s;
+      transition: border-color .15s, background .15s;
     }
 
-    .task-item:hover { border-color: var(--border); }
+    .task-item:hover { background: #EEEEF8; border-color: var(--k1-soft); }
 
-    .task-item.checked { opacity: .55; }
+    .task-item.checked { opacity: .6; }
+    .task-item.checked .task-text { text-decoration: line-through; }
 
     .task-check {
       width: 18px; height: 18px;
-      border-radius: 4px;
-      border: 2px solid var(--border);
+      border-radius: 5px;
+      border: 2px solid #C7C7D9;
       flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
       margin-top: 1px;
@@ -342,66 +362,74 @@
 
     .task-item.checked .task-check::after { display: block; }
 
-    .task-text { font-size: 14px; line-height: 1.45; }
+    .task-text { font-size: 14px; line-height: 1.45; color: var(--text); }
 
     .task-tag {
       font-size: 10px;
-      padding: 2px 7px;
-      border-radius: 4px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 5px;
       margin-left: auto;
       white-space: nowrap;
       flex-shrink: 0;
     }
 
-    .task-tag.crucial { background: #3a1a00; color: var(--accent); border: 1px solid #5a2e00; }
-    .task-tag.verslag { background: #1a1a3a; color: #9090ff; border: 1px solid #2a2a5a; }
+    .task-tag.crucial { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
 
     /* ── VERSLAGEN ── */
     .verslagen-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 12px;
+      gap: 10px;
     }
 
     .verslag-card {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
       padding: 16px 18px;
       cursor: pointer;
-      transition: border-color .2s;
+      transition: border-color .2s, box-shadow .2s;
       user-select: none;
+      box-shadow: var(--shadow);
     }
 
-    .verslag-card:hover { border-color: #4a4d70; }
+    .verslag-card:hover { border-color: var(--k1); box-shadow: 0 4px 16px rgba(92,92,224,.1); }
 
-    .verslag-card.done { border-color: var(--done); background: #0d2e0f; }
+    .verslag-card.done {
+      border-color: var(--done);
+      background: var(--done-soft);
+    }
 
     .verslag-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-    .verslag-icon { font-size: 22px; }
+    .verslag-icon { font-size: 20px; }
 
     .verslag-num {
       font-size: 11px;
+      font-weight: 500;
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: .06em;
     }
 
-    .verslag-name { font-size: 14px; font-weight: 600; }
+    .verslag-name { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.4; }
     .verslag-sub  { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
     .verslag-status {
-      margin-top: 10px;
+      margin-top: 12px;
       font-size: 12px;
+      font-weight: 500;
       color: var(--muted);
     }
 
-    .verslag-card.done .verslag-status { color: var(--done); }
+    .verslag-card.done .verslag-status { color: #077a53; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 600px) {
       header { padding: 20px; gap: 16px; }
       .header-badges { margin-left: 0; align-items: flex-start; }
+      .total-progress { flex-direction: column; gap: 16px; }
+      .big-pct { font-size: 28px; }
     }
   </style>
 </head>
@@ -424,16 +452,18 @@
 
 <!-- TOTAAL VOORTGANG -->
 <div class="total-progress">
-  <h2>Totale voortgang</h2>
-  <div class="big-bar">
-    <div class="big-bar-fill" id="totalBar" style="width:0%"></div>
+  <div class="total-progress-left">
+    <h2>Totale voortgang</h2>
+    <div class="big-bar">
+      <div class="big-bar-fill" id="totalBar" style="width:0%"></div>
+    </div>
   </div>
   <div class="big-pct" id="totalPct">0%</div>
 </div>
 
 <!-- PROJECT INFO -->
 <div class="project-card">
-  <h2>Project</h2>
+  <div class="card-label">Project</div>
   <div class="project-grid">
     <div class="pinfo"><div class="pinfo-label">Opdrachtgever</div><div class="pinfo-val">NKB Solutions</div></div>
     <div class="pinfo"><div class="pinfo-label">Applicatie</div><div class="pinfo-val">Urenregistratie-app</div></div>
